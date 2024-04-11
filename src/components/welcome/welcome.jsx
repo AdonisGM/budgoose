@@ -35,8 +35,8 @@ const Welcome = () => {
 
     const handleLogin = () => {
         if (isLogin) {
-            const username = localStorage.getItem('username')
-            navigate(`/profile/${username}`);
+            // const username = localStorage.getItem('username')
+            navigate(`/transaction`);
             return;
         }
 
@@ -52,13 +52,10 @@ const Welcome = () => {
 
     return (
         <div className={'flex flex-col items-center justify-center h-screen bg-amber-50'}>
-            <h1 className={'text-default-500 text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600'}>Diary</h1>
+            <h1 className={'text-default-500 text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-yellow-400'}>Budgoose</h1>
             <Spacer y={10}/>
             <p className={'text-default-500 text-sm'}>
-                Oh, Bạn đó à! Có chuyện gì khó nói không? Viết ra đi, viết ra đi. Viết ra cho mình nghe, mình sẽ giữ bí mật và luôn ở đây với bạn khi bạn cần.
-            </p>
-            <p className={'text-default-500 text-sm'}>
-                Bạn có thể viết nhật ký của mình ở chế độ riêng tư hoặc công khai.
+                Manage your debt effectively with our user-friendly online tools designed to help you achieve financial freedom.
             </p>
             <Spacer y={16}/>
             <Button
