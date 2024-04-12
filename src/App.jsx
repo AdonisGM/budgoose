@@ -13,6 +13,7 @@ import Welcome from "./components/welcome/welcome.jsx";
 // import Profile from "./components/profile/Profile.jsx";
 import Cookies from "js-cookie";
 import Transaction from "./components/transaction/Transaction.jsx";
+import MainLayout from "./layout/MainLayout.jsx";
 
 const router = createBrowserRouter([
     {
@@ -27,7 +28,7 @@ const router = createBrowserRouter([
     },
     {
         path: "*",
-        element: <p>404</p>,
+        element: <MainLayout/>,
     }
 ]);
 
