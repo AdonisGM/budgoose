@@ -4,16 +4,13 @@ import {
 	createBrowserRouter,
 	RouterProvider,
 } from "react-router-dom";
-// import CookieImage from "./assets/cookie-svgrepo-com.svg";
-import {Button, Card, Image} from "@nextui-org/react";
+import {Button, Card} from "@nextui-org/react";
 import {Fragment, useEffect} from "react";
 import {Toaster} from "react-hot-toast";
-import Auth from "./components/auth/Auth.jsx";
 import Welcome from "./components/welcome/welcome.jsx";
-// import Profile from "./components/profile/Profile.jsx";
 import Cookies from "js-cookie";
-import Transaction from "./components/transaction/Transaction.jsx";
 import MainLayout from "./layout/MainLayout.jsx";
+import TransactionPage from "./pages/TransactionPage.jsx";
 
 const router = createBrowserRouter([
 	{
@@ -26,7 +23,7 @@ const router = createBrowserRouter([
 		children: [
 			{
 				path: "/transaction",
-				element: <Transaction/>,
+				element: <TransactionPage/>,
 			},
 			{
 				path: "/holder",

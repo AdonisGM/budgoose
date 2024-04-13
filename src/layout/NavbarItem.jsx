@@ -65,9 +65,7 @@ const NavbarItem = (props) => {
 			transition={{duration: 0.25}}
 		/>
 
-		<div
-			className={'flex flex-row items-center gap-3 z-20 h-10 absolute'}
-		>
+		<div className={'flex flex-row items-center gap-3 z-20 h-10 absolute'}>
 			<div className={`h-10 w-10 flex items-center justify-center rounded-lg ${backgroundColor}`}>
 				{CustomIcon}
 			</div>

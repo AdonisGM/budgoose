@@ -1,61 +1,99 @@
-import {useEffect, useState} from "react";
+import {Fragment, useEffect, useState} from "react";
 import callApi from "../../apis/GatewayApi.js";
-import {Button, Card, CardBody, Pagination, Table, User} from "@nextui-org/react";
+import {
+	Button,
+	Pagination, Spinner,
+	Table,
+	TableBody, TableCell,
+	TableColumn,
+	TableHeader,
+	TableRow,
+} from "@nextui-org/react";
 import {formatNumber} from "../../common.js";
-import TableTransaction from "./TableTransaction.jsx";
+import TableLoading from "../../layout/TableLoading.jsx";
+import TableEmpty from "../../layout/TableEmpty.jsx";
 
 const Transaction = (props) => {
-    const [holders, setHolders] = useState([])
+	const [page, setPage] = useState(1)
+	const [pages, setPages] = useState(0)
+	const [data, setData] = useState([])
+	const [isLoading, setIsLoading] = useState(false)
 
-    useEffect(() => {
-        callApi('pkg_bud_holder.get_all', {
-            page: 1,
-            size_page: 100
-        }, (data) => {
-            setHolders(data)
-        }, (err) => {
-            console.log(err)
-        })
-    }, []);
+	useEffect(() => {
+		getAllManagement()
+	}, [page]);
 
-    return (
-        <div className={'flex flex-col items-center'}>
-            <div className={'w-[1100px] flex flex-row gap-5'}>
-                <div className={'w-1/4 sticky top-0 self-start'}>
-                    <Card
-                        className={'mt-5'}
-                    >
-                        <CardBody className={'py-3 flex flex-col items-center justify-center'}>
-                            <h1 className={'text-default-500 text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-yellow-400'}>Budgoose</h1>
-                        </CardBody>
-                    </Card>
-                    <Card
-                        className={'mt-5'}
-                    >
-                        <CardBody>
-                            <div className={'grid grid-cols-1 gap-2'}>
-                                {holders.map((holder, index) => (
-                                    <Card key={index} className={'cursor-pointer'}>
-                                        <CardBody
-                                        >
-                                            <p className={'text-sm'}>{holder.C_HOLDER_NAME}</p>
-                                            <p className={'text-sm text-right mt-2 text-green-600 font-bold'}>{formatNumber(holder.C_CASH_BALANCE)} đ</p>
-                                        </CardBody>
-                                    </Card>
-                                ))}
-                            </div>
-                        </CardBody>
-                    </Card>
-                    <div className="mt-5 grid grid-cols-5 gap-1">
+	const getAllManagement = () => {
+		setIsLoading(true)
+		callApi('pkg_bud_management.get_all', {
+			page: page,
+			size_page: 10
+		}, (data) => {
+			setData(data)
+			if (data.length > 0) {
+				setPages(Math.ceil(data[0].TB_TOTAL_ROW/10))
+			}
+			setIsLoading(false)
+		}, (err) => {
+			console.log(err)
+			setIsLoading(false)
+		})
+	}
 
-                    </div>
-                </div>
-                <div className={'w-3/4 mt-5'}>
-                    <TableTransaction/>
-                </div>
-            </div>
-        </div>
-    )
+	return (
+		<Fragment>
+			{/*<div className={'text-right'}>*/}
+			{/*	<Button size="sm" variant="flat" color="primary">*/}
+			{/*		Add*/}
+			{/*	</Button>*/}
+			{/*</div>*/}
+			<div className={'mt-5'}>
+				<Table
+					isStriped={true}
+					bottomContent={
+						pages > 0 ? (
+							<div className="flex w-full justify-end">
+								<Pagination
+									isCompact
+									showControls
+									showShadow
+									color="primary"
+									page={page}
+									total={pages}
+									onChange={(page) => setPage(page)}
+									isDisabled={isLoading}
+								/>
+							</div>
+						) : null
+					}
+				>
+					<TableHeader>
+						<TableColumn key="TB_ROW_NUM">#</TableColumn>
+						<TableColumn key="C_HOLDER_NAME">Name</TableColumn>
+						<TableColumn key="C_CASH_IN">Cash in</TableColumn>
+						<TableColumn key="C_CASH_OUT">Cash out</TableColumn>
+						<TableColumn key="C_DATE">Date</TableColumn>
+					</TableHeader>
+					<TableBody
+						items={data ?? []}
+						isLoading={isLoading}
+						loadingContent={<TableLoading/>}
+						emptyContent={<TableEmpty isLoading={isLoading}/>}
+					>
+						{(item) => (
+							<TableRow key={item?.PK_BUD_MANAGEMENT}>
+								<TableCell>{item?.TB_ROW_NUM}</TableCell>
+								<TableCell>{item?.C_HOLDER_NAME}</TableCell>
+								<TableCell>{formatNumber(item?.C_CASH_IN)}</TableCell>
+								<TableCell>{formatNumber(item?.C_CASH_OUT)}</TableCell>
+								<TableCell>{item?.C_DATE}</TableCell>
+							</TableRow>
+						)}
+					</TableBody>
+				</Table>
+			</div>
+		</Fragment>
+	)
 }
 
 export default Transaction
