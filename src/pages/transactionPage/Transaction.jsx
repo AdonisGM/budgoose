@@ -14,6 +14,7 @@ import TableLoading from "../../layout/TableLoading.jsx";
 import TableEmpty from "../../layout/TableEmpty.jsx";
 import UpdateTransaction from "./UpdateTransaction.jsx";
 import {IconArrowBigUpFilled, IconEdit, IconTrashX} from "@tabler/icons-react";
+import toast from "react-hot-toast";
 
 const Transaction = () => {
 	const [page, setPage] = useState(1)
@@ -48,6 +49,18 @@ const Transaction = () => {
 
 	const handlerSuccess = () => {
 		getAllManagement()
+	}
+
+	const handlerDelete = (id) => {
+		setIsLoading(true)
+		callApi('pkg_bud_management.delete_item', {
+			pk_bud_management: id
+		}, () => {
+			toast.success('Delete successfully.')
+			getAllManagement()
+		}, (err) => {
+			console.log(err)
+		})
 	}
 
 	return (
@@ -125,6 +138,7 @@ const Transaction = () => {
 										<IconTrashX
 											className={'text-rose-500 cursor-pointer'}
 											size={16}
+											onClick={() => {handlerDelete(item?.PK_BUD_MANAGEMENT)}}
 										/>
 									</div>
 								</TableCell>

@@ -13,7 +13,7 @@ export const formatDate = (date) => {
 }
 
 export const formatZoneTimeToString = (date) => {
-	return moment(date.toDate()).format('DD/MM/YYYY HH:mm:ss')
+	return moment(date.toDate()).toISOString()
 }
 
 export const convertStringToDate = (str) => {

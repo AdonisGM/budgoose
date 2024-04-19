@@ -56,7 +56,7 @@ const InputDatetime = (props) => {
 			isDisabled={props.isDisabled}
 			onChange={props.onValueChange}
 			onClick={() => {setIsTouch(true);}}
-			hideTimeZone={true}
+			hideTimeZone={false}
 			showMonthAndYearPickers={true}
 		/>
 }
