@@ -1,5 +1,5 @@
 import {useEffect} from "react";
-import Transaction from "../components/transaction/Transaction.jsx";
+import Transaction from "./transactionPage/Transaction.jsx";
 
 const TransactionPage = () => {
 	useEffect(() => {

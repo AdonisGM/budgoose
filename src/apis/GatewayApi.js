@@ -1,5 +1,6 @@
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
+import ErrorToast from "../layout/ErrorToast.jsx";
 
 let isRefreshingToken = false;
 let arrPendingRequest = [];
@@ -37,17 +38,32 @@ const callApi = (cmd, data, onSuccess, onError) => {
         })
         .then((data) => {
             if (data.error_message) {
-                toast.error(data.error_message);
+                showToastError(data.error_message)
                 if (typeof onError === 'function') {
                     onError();
                 }
+            } else {
+                if (typeof onSuccess === 'function') {
+                    onSuccess(data.data);
+                }
             }
-
-            onSuccess(data.data);
         })
         .catch((err) => {
             console.log(err);
         })
+}
+
+const showToastError = (errorMessage) => {
+    if (!errorMessage.includes(']:::[')) {
+        toast.error(errorMessage);
+    } else {
+        const arrError = errorMessage.split(':::');
+        const errorObj = {
+            code: arrError[0].substring(1, arrError[0].length - 1),
+            message: arrError[2].substring(1, arrError[2].length - 1)
+        }
+        toast.error(ErrorToast(errorObj));
+    }
 }
 
 const callRefreshToken = (onSuccess) => {

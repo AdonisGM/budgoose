@@ -7,17 +7,23 @@ import {
 	TableBody, TableCell,
 	TableColumn,
 	TableHeader,
-	TableRow,
+	TableRow, useDisclosure,
 } from "@nextui-org/react";
-import {formatNumber} from "../../common.js";
+import {formatDate, formatNumber} from "../../common/common.js";
 import TableLoading from "../../layout/TableLoading.jsx";
 import TableEmpty from "../../layout/TableEmpty.jsx";
+import UpdateTransaction from "./UpdateTransaction.jsx";
+import {IconArrowBigUpFilled} from "@tabler/icons-react";
 
 const Transaction = (props) => {
 	const [page, setPage] = useState(1)
 	const [pages, setPages] = useState(0)
 	const [data, setData] = useState([])
 	const [isLoading, setIsLoading] = useState(false)
+	const [mode, setMode] = useState()
+	const [idSelected, setIdSelected] = useState(undefined)
+
+	const {isOpen, onOpen, onOpenChange} = useDisclosure();
 
 	useEffect(() => {
 		getAllManagement()
@@ -40,13 +46,30 @@ const Transaction = (props) => {
 		})
 	}
 
+	const handlerSuccess = () => {
+		getAllManagement()
+	}
+
 	return (
 		<Fragment>
-			{/*<div className={'text-right'}>*/}
-			{/*	<Button size="sm" variant="flat" color="primary">*/}
-			{/*		Add*/}
-			{/*	</Button>*/}
-			{/*</div>*/}
+			<UpdateTransaction
+				mode={mode}
+				id={idSelected}
+				isOpen={isOpen}
+				onClose={() => {}}
+				onOpenChange={onOpenChange}
+				onSuccess={handlerSuccess}
+			/>
+			<div className={'text-right'}>
+				<Button
+					size="sm"
+					variant="flat"
+					color="primary"
+					onClick={onOpen}
+				>
+					Add transaction
+				</Button>
+			</div>
 			<div className={'mt-5'}>
 				<Table
 					isStriped={true}
@@ -70,8 +93,8 @@ const Transaction = (props) => {
 					<TableHeader>
 						<TableColumn key="TB_ROW_NUM">#</TableColumn>
 						<TableColumn key="C_HOLDER_NAME">Name</TableColumn>
-						<TableColumn key="C_CASH_IN">Cash in</TableColumn>
-						<TableColumn key="C_CASH_OUT">Cash out</TableColumn>
+						<TableColumn key="C_CASH_IN">Cash</TableColumn>
+						<TableColumn key="C_NOTE">NOTE</TableColumn>
 						<TableColumn key="C_DATE">Date</TableColumn>
 					</TableHeader>
 					<TableBody
@@ -84,9 +107,12 @@ const Transaction = (props) => {
 							<TableRow key={item?.PK_BUD_MANAGEMENT}>
 								<TableCell>{item?.TB_ROW_NUM}</TableCell>
 								<TableCell>{item?.C_HOLDER_NAME}</TableCell>
-								<TableCell>{formatNumber(item?.C_CASH_IN)}</TableCell>
-								<TableCell>{formatNumber(item?.C_CASH_OUT)}</TableCell>
-								<TableCell>{item?.C_DATE}</TableCell>
+								<TableCell className={'flex items-center gap-1'}>
+									<IconArrowBigUpFilled className={`${item?.C_CASH_IN === 0 ? `text-green-500` : `text-rose-500 rotate-180`}`} size={14}/>
+									{formatNumber(item?.C_CASH_IN === 0 ? item?.C_CASH_OUT : item?.C_CASH_IN)}
+								</TableCell>
+								<TableCell>{item?.C_NOTE}</TableCell>
+								<TableCell>{formatDate(item?.C_DATE)}</TableCell>
 							</TableRow>
 						)}
 					</TableBody>
