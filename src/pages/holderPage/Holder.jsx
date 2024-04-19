@@ -1,21 +1,12 @@
 import {Fragment, useEffect, useState} from "react";
-import callApi from "../../apis/GatewayApi.js";
-import {
-	Button,
-	Pagination,
-	Table,
-	TableBody, TableCell,
-	TableColumn,
-	TableHeader,
-	TableRow, useDisclosure,
-} from "@nextui-org/react";
-import {formatDate, formatNumber} from "../../common/common.js";
+import {Pagination, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow} from "@nextui-org/react";
 import TableLoading from "../../layout/TableLoading.jsx";
 import TableEmpty from "../../layout/TableEmpty.jsx";
-import UpdateTransaction from "./UpdateTransaction.jsx";
 import {IconArrowBigUpFilled, IconEdit, IconTrashX} from "@tabler/icons-react";
+import {formatDate, formatNumber} from "../../common/common.js";
+import callApi from "../../apis/GatewayApi.js";
 
-const Transaction = () => {
+const Holder = () => {
 	const [page, setPage] = useState(1)
 	const [pages, setPages] = useState(0)
 	const [data, setData] = useState([])
@@ -23,15 +14,13 @@ const Transaction = () => {
 	const [mode, setMode] = useState()
 	const [idSelected, setIdSelected] = useState(undefined)
 
-	const {isOpen, onOpen, onOpenChange} = useDisclosure();
-
 	useEffect(() => {
 		getAllManagement()
 	}, [page]);
 
 	const getAllManagement = () => {
 		setIsLoading(true)
-		callApi('pkg_bud_management.get_all', {
+		callApi('pkg_bud_holder.get_all', {
 			page: page,
 			size_page: 10
 		}, (data) => {
@@ -46,30 +35,8 @@ const Transaction = () => {
 		})
 	}
 
-	const handlerSuccess = () => {
-		getAllManagement()
-	}
-
 	return (
 		<Fragment>
-			<UpdateTransaction
-				mode={mode}
-				id={idSelected}
-				isOpen={isOpen}
-				onClose={() => {}}
-				onOpenChange={onOpenChange}
-				onSuccess={handlerSuccess}
-			/>
-			<div className={'text-right'}>
-				<Button
-					size="sm"
-					variant="flat"
-					color="primary"
-					onClick={onOpen}
-				>
-					Add transaction
-				</Button>
-			</div>
 			<div className={'mt-5'}>
 				<Table
 					isStriped={true}
@@ -91,11 +58,11 @@ const Transaction = () => {
 					}
 				>
 					<TableHeader>
-						<TableColumn key="TB_ROW_NUM">#</TableColumn>
-						<TableColumn key="C_HOLDER_NAME">Name</TableColumn>
-						<TableColumn key="C_CASH_IN">Cash</TableColumn>
-						<TableColumn key="C_NOTE">NOTE</TableColumn>
-						<TableColumn key="C_DATE">Date</TableColumn>
+						<TableColumn>#</TableColumn>
+						<TableColumn>Username</TableColumn>
+						<TableColumn>Name</TableColumn>
+						<TableColumn>Cash</TableColumn>
+						<TableColumn>Note</TableColumn>
 						<TableColumn>Action</TableColumn>
 					</TableHeader>
 					<TableBody
@@ -105,17 +72,16 @@ const Transaction = () => {
 						emptyContent={<TableEmpty isLoading={isLoading}/>}
 					>
 						{(item) => (
-							<TableRow key={item?.PK_BUD_MANAGEMENT}>
+							<TableRow key={item?.PK_BUD_HOLDER}>
 								<TableCell>{item?.TB_ROW_NUM}</TableCell>
+								<TableCell>{item?.C_HOLDER_USERNAME}</TableCell>
 								<TableCell>{item?.C_HOLDER_NAME}</TableCell>
 								<TableCell>
-									<div className={'flex items-center gap-1 h-full'}>
-										<IconArrowBigUpFilled className={`${item?.C_CASH_IN !== 0 ? `text-green-500` : `text-rose-500 rotate-180`}`} size={14}/>
-										{formatNumber(item?.C_CASH_IN === 0 ? item?.C_CASH_OUT : item?.C_CASH_IN)}
+									<div className={`flex gap-1 ${item?.C_CASH_BALANCE >= 0 ? `text-green-500` : `text-rose-500`}`}>
+										{formatNumber(item?.C_CASH_BALANCE)}
 									</div>
 								</TableCell>
 								<TableCell>{item?.C_NOTE}</TableCell>
-								<TableCell>{formatDate(item?.C_DATE)}</TableCell>
 								<TableCell>
 									<div className={'flex items-center gap-1'}>
 										<IconEdit
@@ -137,4 +103,4 @@ const Transaction = () => {
 	)
 }
 
-export default Transaction
+export default Holder

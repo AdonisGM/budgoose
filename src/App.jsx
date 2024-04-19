@@ -11,6 +11,7 @@ import Welcome from "./components/welcome/welcome.jsx";
 import Cookies from "js-cookie";
 import MainLayout from "./layout/MainLayout.jsx";
 import TransactionPage from "./pages/TransactionPage.jsx";
+import HolderPage from "./pages/HolderPage.jsx";
 
 const router = createBrowserRouter([
 	{
@@ -27,7 +28,7 @@ const router = createBrowserRouter([
 			},
 			{
 				path: "/holder",
-				element: <p>Holder</p>,
+				element: <HolderPage/>,
 			},
 		]
 	},
