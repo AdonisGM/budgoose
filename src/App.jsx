@@ -49,7 +49,7 @@ function App() {
 		if (Cookies.get('info')) {
 			try {
 				const info = JSON.parse(decodeURIComponent(Cookies.get('info')));
-				localStorage.setItem('username', info.username);
+				localStorage.setItem('username', info);
 			} catch (e) {
 				Cookies.remove('info', {path: '/', domain: import.meta.env.VITE_DOMAIN_COOKIE});
 				window.location.href = '/';
