@@ -40,10 +40,6 @@ const router = createBrowserRouter([
 
 function App() {
 	useEffect(() => {
-		if (!localStorage.getItem('isAllowCookie')) {
-			animate(scope.current, {opacity: 1, y: 0, scale: 1});
-		}
-
 		if (Cookies.get('info')) {
 			try {
 				const info = Cookies.get('info');
