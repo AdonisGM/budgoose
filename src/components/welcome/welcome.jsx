@@ -30,7 +30,7 @@ const Welcome = () => {
 
     useEffect(() => {
         setQuote(quotes[Math.floor(Math.random() * quotes.length)]);
-        setIsLogin(Cookies.get('access_token') !== undefined && Cookies.get('refresh_token') !== undefined);
+        setIsLogin(Cookies.get('info') !== undefined);
     }, []);
 
     const handleLogin = () => {
