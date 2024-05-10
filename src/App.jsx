@@ -39,8 +39,6 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-	const [scope, animate] = useAnimate();
-
 	useEffect(() => {
 		if (!localStorage.getItem('isAllowCookie')) {
 			animate(scope.current, {opacity: 1, y: 0, scale: 1});
@@ -51,6 +49,7 @@ function App() {
 				const info = Cookies.get('info');
 				localStorage.setItem('username', info);
 			} catch (e) {
+				console.log(e)
 				Cookies.remove('info', {path: '/', domain: import.meta.env.VITE_DOMAIN_COOKIE});
 				window.location.href = '/';
 			}
@@ -59,7 +58,7 @@ function App() {
 		if (!Cookies.get('info')) {
 			localStorage.removeItem('username');
 		}
-	}, [animate, scope]);
+	}, []);
 
 	return (
 		<div>
