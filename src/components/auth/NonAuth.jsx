@@ -8,10 +8,9 @@ const NonAuth = (props) => {
 
     useEffect(() => {
         // check token in cookies
-        const token = Cookie.get('access_token', {path: '/', domain: import.meta.env.VITE_DOMAIN_COOKIE});
-        const refreshToken = Cookie.get('refresh_token', {path: '/', domain: import.meta.env.VITE_DOMAIN_COOKIE});
+        const info = Cookie.get('access_token', {path: '/', domain: import.meta.env.VITE_DOMAIN_COOKIE});
 
-        if (token !== undefined && refreshToken !== undefined) {
+        if (info !== undefined) {
             navigate('/');
         }
 

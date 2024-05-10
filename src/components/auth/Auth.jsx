@@ -8,12 +8,10 @@ const Auth = ({children}) => {
 
     useEffect(() => {
         // check token in cookies
-        const token = Cookie.get('access_token', {path: '/', domain: import.meta.env.VITE_DOMAIN_COOKIE});
-        const refreshToken = Cookie.get('refresh_token', {path: '/', domain: import.meta.env.VITE_DOMAIN_COOKIE});
+        const info = Cookie.get('info', {path: '/', domain: import.meta.env.VITE_DOMAIN_COOKIE});
 
-        if (token === undefined || refreshToken === undefined) {
-            Cookie.remove('access_token', {path: '/', domain: import.meta.env.VITE_DOMAIN_COOKIE});
-            Cookie.remove('refresh_token', {path: '/', domain: import.meta.env.VITE_DOMAIN_COOKIE});
+        if (info === undefined) {
+            Cookie.remove('info', {path: '/', domain: import.meta.env.VITE_DOMAIN_COOKIE});
             navigate('/login');
         }
 
