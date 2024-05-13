@@ -18,17 +18,17 @@ const InputArrowTransaction = (props) => {
 		if (props.isDisabled) {
 			return;
 		}
-		field.onChange(props.stateArrow === 'UP' ? 'DOWN' : 'UP')
+		field.onChange(field.value === 'UP' ? 'DOWN' : 'UP')
 	}
 
 	return <Button
 		isIconOnly
-		color={props.stateArrow === 'DOWN' ? 'danger' : 'success'}
+		color={field.value === 'DOWN' ? 'danger' : 'success'}
 		aria-label={'Like'}
 		onClick={handleChange}
 	>
 		<motion.div
-			animate={props.stateArrow === 'DOWN' ? 'down' : 'up'}
+			animate={field.value === 'DOWN' ? 'down' : 'up'}
 			variants={{
 				down: {
 					rotate: 180
