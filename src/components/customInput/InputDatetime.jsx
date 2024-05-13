@@ -33,7 +33,7 @@ const InputDatetime = (props) => {
 			</div>}
 			placeholder={props.placeholder}
 			isDisabled={props.isDisabled}
-			hideTimeZone={true}
+			hideTimeZone={false}
 		/>
 	)
 }
