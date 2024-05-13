@@ -27,16 +27,15 @@ const InputAutocomplete = (props) => {
 			errorMessage={error?.message}
 
 			size={'sm'}
-			defaultItems={[
-				{label: '1', value: '1'},
-				{label: '2', value: '2'},
-			]}
+			defaultItems={props.data}
 			type={'text'}
 			variant={'bordered'}
 			label={<div className={'flex items-center justify-center gap-1'}>
 				{props.label} {!!props.rules?.required && <IconAsterisk size={10} className={'text-rose-600'}/>}
 			</div>}
 			placeholder={props.placeholder}
+			isDisabled={props.isDisabled || props.isLoading}
+			isLoading={props.isLoading}
 		>
 			{(item) => <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>}
 		</Autocomplete>

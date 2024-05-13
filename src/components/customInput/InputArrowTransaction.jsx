@@ -5,6 +5,9 @@ import PropTypes from "prop-types";
 
 const InputArrowTransaction = (props) => {
 	const handleChange = () => {
+		if (props.isDisabled) {
+			return;
+		}
 		props.onChange(props.stateArrow === 'UP' ? 'DOWN' : 'UP')
 	}
 

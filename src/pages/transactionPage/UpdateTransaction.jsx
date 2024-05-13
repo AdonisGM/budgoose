@@ -65,7 +65,7 @@ const UpdateTransaction = (props) => {
 								required: 'Field is required'
 							}}
 						/>
-						<div className={'flex flex-row gap-1 justify-center items-center'}>
+						<div className={'flex flex-row gap-1 justify-center items-start'}>
 							<InputArrowTransaction
 								name={'stateArrow'}
 								control={control}
