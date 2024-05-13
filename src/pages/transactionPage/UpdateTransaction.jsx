@@ -34,8 +34,8 @@ const UpdateTransaction = (props) => {
 
 		callApi('pkg_bud_management.update_item', {
 			fk_bud_holder: data.holder,
-			cash_in: data.amount === 'UP' ? revertFormatNumber(data.amount) : 0,
-			cash_out: data.amount === 'DOWN' ? revertFormatNumber(data.amount) : 0,
+			cash_in: data.stateArrow === 'UP' ? revertFormatNumber(data.amount) : 0,
+			cash_out: data.stateArrow === 'DOWN' ? revertFormatNumber(data.amount) : 0,
 			note: data.note,
 			type: 'NORMAL',
 			date: formatZoneTimeToString(data.date),
