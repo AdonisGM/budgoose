@@ -1,7 +1,6 @@
 import {Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader} from "@nextui-org/react";
 import PropTypes from "prop-types";
 import {useEffect, useState} from "react";
-import {required} from "../../common/validate.js";
 import InputNumber from "../../components/customInput/InputNumber.jsx";
 import InputSelectHolder from "../../components/customInput/InputSelectHolder.jsx";
 import InputArrowTransaction from "../../components/customInput/InputArrowTransaction.jsx";
@@ -11,44 +10,35 @@ import {getLocalTimeZone, now} from "@internationalized/date";
 import callApi from "../../apis/GatewayApi.js";
 import {formatZoneTimeToString, revertFormatNumber} from "../../common/common.js";
 import toast from "react-hot-toast";
+import {useForm} from "react-hook-form";
 
 const UpdateTransaction = (props) => {
-	const [formAmount, setFormAmount] = useState('0')
-	const [formHolder, setFormHolder] = useState(undefined)
-	const [formStateArrow, setFormStateArrow] = useState('UP')
-	const [formNote, setFormNote] = useState('')
-	const [formDate, setFormDate] = useState(now(getLocalTimeZone()))
-
 	const [stateUpdate, setStateUpdate] = useState('init')
-	const [triggerResetInput, setTriggerResetInput] = useState(false)
+
+	const { control, handleSubmit, reset } = useForm({
+		defaultValues: {
+			holder: '',
+			cash: '',
+			note: '',
+			date: now(getLocalTimeZone()),
+			stateArrow: 'UP'
+		}
+	})
 
 	useEffect(() => {
-		resetInput()
+		reset();
 	}, [props.isOpen]);
 
-	const resetInput = () => {
-		setFormAmount('0')
-		setFormHolder(undefined)
-		setFormStateArrow('UP')
-		setFormNote('')
-		setFormDate(now(getLocalTimeZone()))
-
-		setStateUpdate('init')
-		setTriggerResetInput(!triggerResetInput)
-	}
-
-	const onSubmit = (event, onClose) => {
-		event.preventDefault()
-
+	const onSubmit = (data, onClose) => {
 		setStateUpdate('pending')
 
 		callApi('pkg_bud_management.update_item', {
-			fk_bud_holder: formHolder,
-			cash_in: formStateArrow === 'UP' ? revertFormatNumber(formAmount) : 0,
-			cash_out: formStateArrow === 'DOWN' ? revertFormatNumber(formAmount) : 0,
-			note: formNote,
+			fk_bud_holder: data.holder,
+			cash_in: data.cash === 'UP' ? revertFormatNumber(data.cash) : 0,
+			cash_out: data.cash === 'DOWN' ? revertFormatNumber(data.cash) : 0,
+			note: data.note,
 			type: 'NORMAL',
-			date: formatZoneTimeToString(formDate),
+			date: formatZoneTimeToString(data.date),
 		}, () => {
 			toast.success('Create successfully.')
 			setStateUpdate('init')
@@ -62,52 +52,46 @@ const UpdateTransaction = (props) => {
 	return <Modal isOpen={props.isOpen} onOpenChange={props.onOpenChange}>
 		<ModalContent>
 			{(onClose) => (
-				<form onSubmit={(event) => {
-					onSubmit(event, onClose)
-				}}>
+				<form onSubmit={handleSubmit((data) => onSubmit(data, onClose))}>
 					<ModalHeader
 						className="flex flex-col gap-1">{props.mode === 'edit' ? 'Edit transaction' : 'Add transaction'}</ModalHeader>
 					<ModalBody>
 						<InputSelectHolder
-							name={'Holder'}
+							name={'holder'}
 							label={'Holder'}
 							placeholder={'Please select the holder'}
-							value={formHolder}
-							onValueChange={setFormHolder}
-							triggerReset={triggerResetInput}
-							validates={[required()]}
+							control={control}
+							rules={{
+								required: 'Field is required'
+							}}
 						/>
 						<div className={'flex flex-row gap-1 justify-center items-center'}>
 							<InputArrowTransaction
-								stateArrow={formStateArrow}
-								onChange={setFormStateArrow}
+								name={'stateArrow'}
+								control={control}
 							/>
 							<InputNumber
-								name={'Amount'}
+								name={'amount'}
 								label={'Amount'}
 								placeholder={'Please enter the amount'}
-								value={formAmount}
-								onValueChange={setFormAmount}
-								triggerReset={triggerResetInput}
-								validates={[required()]}
+								control={control}
+								rules={{
+									required: 'Field is required'
+								}}
 							/>
 						</div>
 						<div className={'max-w-[284px]'}>
 							<InputDatetime
-								name={'Date'}
-								value={formDate}
+								name={'date'}
 								label={'Date'}
-								onValueChange={setFormDate}
-								triggerReset={triggerResetInput}
+								control={control}
 							/>
 						</div>
 						<InputText
-							name={'Note'}
-							value={formNote}
+							name={'note'}
 							label={'Note'}
 							placeholder={'Write some note'}
-							onValueChange={setFormNote}
-							triggerReset={triggerResetInput}
+							control={control}
 						/>
 					</ModalBody>
 					<ModalFooter>

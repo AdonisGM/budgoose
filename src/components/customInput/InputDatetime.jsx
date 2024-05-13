@@ -1,78 +1,41 @@
-import PropTypes from "prop-types";
-import {useEffect, useState} from "react";
 import {DatePicker} from "@nextui-org/react";
 import {IconAsterisk} from "@tabler/icons-react";
+import {useController} from "react-hook-form";
 
 const InputDatetime = (props) => {
-	const [isRequired, setIsRequired] = useState(false)
-	const [isTouch, setIsTouch] = useState(false)
-	const [messageError, setMessageError] = useState(undefined)
-	const [isValid, setIsValid] = useState(true)
+	const {
+		field,
+		fieldState: { invalid, isTouched, isDirty , error},
+		formState: { touchedFields, dirtyFields }
+	} = useController({
+		name: props.name,
+		control: props.control,
+		rules: props.rules,
+	});
 
-	useEffect(() => {
-		const hasFunctionRequired = props.validates?.find((e) => {
-			return e.name === 'required'
-		})
-		setIsRequired(!!hasFunctionRequired)
-	}, []);
+	return (
+		<DatePicker
+			// react form hook
+			onChange={field.onChange}
+			onBlur={field.onBlur}
+			value={field.value}
+			ref={field.ref}
 
-	useEffect(() => {
-		setIsTouch(false)
-		setIsValid(true)
-	}, [props.triggerReset]);
+			// nextUI
+			isInvalid={!!error}
+			errorMessage={error?.message}
 
-	useEffect(() => {
-		if (props.validates === null || props.validates === undefined || props.validates.length === 0) return;
-		let message = undefined
-
-		for (const validate of props.validates) {
-			message = validate(props.value)
-
-			if (message) {
-				break;
-			}
-		}
-
-		if (message) {
-			setMessageError(message)
-			setIsValid(false)
-		} else {
-			setMessageError(undefined)
-			setIsValid(true)
-		}
-	}, [props.value]);
-
-	return <DatePicker
+			type={'text'}
 			size={'sm'}
-			variant={'bordered'}
-			name={props.name}
-			value={props.value}
+			variant={'flat'}
 			label={<div className={'flex items-center justify-start gap-1'}>
-				{props.label} {isRequired && <IconAsterisk size={10} className={'text-rose-600'}/>}
+				{props.label} {!!props.rules?.required && <IconAsterisk size={8} className={'text-rose-600'}/>}
 			</div>}
 			placeholder={props.placeholder}
-			isInvalid={!isValid && isTouch}
-			errorMessage={messageError}
 			isDisabled={props.isDisabled}
-			onChange={props.onValueChange}
-			onClick={() => {setIsTouch(true);}}
-			hideTimeZone={false}
-			showMonthAndYearPickers={true}
+			hideTimeZone={true}
 		/>
-}
-
-InputDatetime.propTypes = {
-	name: PropTypes.string.isRequired,
-	value: PropTypes.string.isRequired,
-	label: PropTypes.string.isRequired,
-	placeholder: PropTypes.string,
-	triggerReset: PropTypes.bool,
-
-	isDisabled: PropTypes.bool,
-
-	onValueChange: PropTypes.func,
-
-	validates: PropTypes.arrayOf(PropTypes.func)
+	)
 }
 
 export default InputDatetime

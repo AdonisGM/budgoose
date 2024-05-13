@@ -1,47 +1,18 @@
 import {Input} from "@nextui-org/react";
-import PropTypes from "prop-types";
-import {Fragment, useEffect, useState} from "react";
 import {IconAsterisk} from "@tabler/icons-react";
-import {formatNumber, revertFormatNumber} from "../../common/common.js";
+import {formatNumber} from "../../common/common.js";
+import {useController} from "react-hook-form";
 
 const InputNumber = (props) => {
-	const [isRequired, setIsRequired] = useState(false)
-	const [isTouch, setIsTouch] = useState(false)
-	const [messageError, setMessageError] = useState(undefined)
-	const [isValid, setIsValid] = useState(true)
-
-	useEffect(() => {
-		const hasFunctionRequired = props.validates?.find((e) => {
-			return e.name === 'required'
-		})
-		setIsRequired(!!hasFunctionRequired)
-	}, []);
-
-	useEffect(() => {
-		setIsTouch(false)
-		setIsValid(true)
-	}, [props.triggerReset]);
-
-	useEffect(() => {
-		if (props.validates === null || props.validates === undefined || props.validates.length === 0) return;
-		let message = undefined
-
-		for (const validate of props.validates) {
-			message = validate(revertFormatNumber(props.value))
-
-			if (message) {
-				break;
-			}
-		}
-
-		if (message) {
-			setMessageError(message)
-			setIsValid(false)
-		} else {
-			setMessageError(undefined)
-			setIsValid(true)
-		}
-	}, [props.value]);
+	const {
+		field,
+		fieldState: { invalid, isTouched, isDirty , error},
+		formState: { touchedFields, dirtyFields }
+	} = useController({
+		name: props.name,
+		control: props.control,
+		rules: props.rules,
+	});
 
 	const processTextNumber = (value) => {
 		let textNumber = value.replace(/[^0-9]/g, "")
@@ -54,42 +25,36 @@ const InputNumber = (props) => {
 			textNumber = textNumber.replace(/^0+/g, "")
 		}
 
-		props.onValueChange(formatNumber(textNumber))
+		return formatNumber(textNumber)
 	}
 
-	return <Fragment>
+	const handleChangeValue = (value) => {
+		const numberFormat = processTextNumber(value)
+		field.onChange(numberFormat)
+	}
+
+	return (
 		<Input
+			// react form hook
+			onValueChange={handleChangeValue}
+			onBlur={field.onBlur}
+			value={field.value}
+			ref={field.ref}
+
+			// nextUI
+			isInvalid={!!error}
+			errorMessage={error?.message}
+
 			type={'text'}
-			endContent={'VND'}
 			size={'sm'}
-			variant={'bordered'}
-			name={props.name}
-			value={props.value}
-			label={<div className={'flex items-center justify-center gap-1'}>
-				{props.label} {isRequired && <IconAsterisk size={10} className={'text-rose-600'}/>}
+			variant={'flat'}
+			label={<div className={'flex items-center justify-start gap-1'}>
+				{props.label} {!!props.rules?.required && <IconAsterisk size={8} className={'text-rose-600'}/>}
 			</div>}
 			placeholder={props.placeholder}
-			isInvalid={!isValid && isTouch}
-			errorMessage={messageError}
 			isDisabled={props.isDisabled}
-			onValueChange={processTextNumber}
-			onClick={(event) => {setIsTouch(true); event.target.select()}}
 		/>
-	</Fragment>
-}
-
-InputNumber.propTypes = {
-	name: PropTypes.string.isRequired,
-	value: PropTypes.string.isRequired,
-	label: PropTypes.string.isRequired,
-	placeholder: PropTypes.string,
-	triggerReset: PropTypes.bool,
-
-	isDisabled: PropTypes.bool,
-
-	onValueChange: PropTypes.func,
-
-	validates: PropTypes.arrayOf(PropTypes.func)
+	)
 }
 
 export default InputNumber;

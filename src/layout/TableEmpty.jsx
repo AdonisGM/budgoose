@@ -1,4 +1,4 @@
-import tableEmpty from '../../public/table-empty.png'
+import tableEmpty from '../assets/table-empty.png'
 import PropTypes from "prop-types";
 
 const TableEmpty = (props) => {

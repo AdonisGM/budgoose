@@ -12,6 +12,9 @@ import Cookies from "js-cookie";
 import MainLayout from "./layout/MainLayout.jsx";
 import TransactionPage from "./pages/TransactionPage.jsx";
 import HolderPage from "./pages/HolderPage.jsx";
+import Auth from "./components/auth/Auth.jsx";
+import Test from "./pages/testPage/Test.jsx";
+import ErrorBoundary from "./pages/errorPage/ErrorBoundary.jsx";
 
 const router = createBrowserRouter([
 	{
@@ -20,7 +23,7 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/",
-		element: <MainLayout/>,
+		element: <Auth><MainLayout/></Auth>,
 		children: [
 			{
 				path: "/transaction",
@@ -31,6 +34,11 @@ const router = createBrowserRouter([
 				element: <HolderPage/>,
 			},
 		]
+	},
+	{
+		path: "/test",
+		element: <Test/>,
+		errorElement: <ErrorBoundary/>
 	},
 	{
 		path: "*",

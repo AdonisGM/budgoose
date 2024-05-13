@@ -33,18 +33,4 @@ const InputSelectHolder = (props) => {
 	/>
 }
 
-InputSelectHolder.propTypes = {
-	name: PropTypes.string.isRequired,
-	value: PropTypes.string.isRequired,
-	label: PropTypes.string.isRequired,
-	placeholder: PropTypes.string,
-	triggerReset: PropTypes.bool,
-
-	isDisabled: PropTypes.bool,
-
-	onValueChange: PropTypes.func,
-
-	validates: PropTypes.arrayOf(PropTypes.func)
-}
-
 export default InputSelectHolder;

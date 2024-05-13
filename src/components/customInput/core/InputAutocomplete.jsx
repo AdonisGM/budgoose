@@ -1,80 +1,46 @@
 import {Autocomplete, AutocompleteItem} from "@nextui-org/react";
 import PropTypes from "prop-types";
 import {IconAsterisk} from "@tabler/icons-react";
-import {useEffect, useState} from "react";
+import {useController} from "react-hook-form";
 
 const InputAutocomplete = (props) => {
-	const [isRequired, setIsRequired] = useState(false)
-	const [isTouch, setIsTouch] = useState(false)
-	const [messageError, setMessageError] = useState(undefined)
-	const [isValid, setIsValid] = useState(true)
-
-	useEffect(() => {
-		if (props.validates === null || props.validates === undefined || props.validates.length === 0) return;
-		let message = undefined
-
-		for (const validate of props.validates) {
-			message = validate(props.value)
-
-			if (message) {
-				break;
-			}
-		}
-
-		if (message) {
-			setMessageError(message)
-			setIsValid(false)
-		} else {
-			setMessageError(undefined)
-			setIsValid(true)
-		}
-	}, [props.value]);
-
-	useEffect(() => {
-		const hasFunctionRequired = props.validates?.find((e) => {
-			return e.name === 'required'
-		})
-		setIsRequired(!!hasFunctionRequired)
-	}, []);
+	const {
+		field,
+		fieldState: { invalid, isTouched, isDirty , error},
+		formState: { touchedFields, dirtyFields }
+	} = useController({
+		name: props.name,
+		control: props.control,
+		rules: props.rules,
+	});
 
 	return (
 		<Autocomplete
+			// react form hook
+			onSelectionChange={field.onChange}
+			onBlur={field.onBlur}
+			value={field.value}
+			ref={field.ref}
+
+			// nextUI
+			isInvalid={!!error}
+			errorMessage={error?.message}
+
 			size={'sm'}
-			defaultItems={props.data}
+			defaultItems={[
+				{label: '1', value: '1'},
+				{label: '2', value: '2'},
+			]}
 			type={'text'}
 			variant={'bordered'}
-			name={props.name}
-			value={props.value}
 			label={<div className={'flex items-center justify-center gap-1'}>
-				{props.label} {isRequired && <IconAsterisk size={10} className={'text-rose-600'}/>}
+				{props.label} {!!props.rules?.required && <IconAsterisk size={10} className={'text-rose-600'}/>}
 			</div>}
 			placeholder={props.placeholder}
-			isDisabled={props.isDisabled || props.isLoading}
-			isLoading={props.isLoading}
-			isInvalid={!isValid && isTouch}
-			errorMessage={messageError}
-			onSelectionChange={props.onValueChange}
-			onClick={(event) => {setIsTouch(true); event.target.select()}}
 		>
 			{(item) => <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>}
 		</Autocomplete>
-	);
-}
-
-InputAutocomplete.propTypes = {
-	data: PropTypes.array.isRequired,
-	name: PropTypes.string.isRequired,
-	value: PropTypes.string.isRequired,
-	label: PropTypes.string.isRequired,
-	placeholder: PropTypes.string,
-	triggerReset: PropTypes.bool,
-
-	isDisabled: PropTypes.bool,
-	isLoading: PropTypes.bool,
-
-	onValueChange: PropTypes.func,
-
-	validates: PropTypes.arrayOf(PropTypes.func)
+	)
 }
 
 export default InputAutocomplete;
