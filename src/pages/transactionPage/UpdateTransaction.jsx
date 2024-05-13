@@ -6,7 +6,7 @@ import InputSelectHolder from "../../components/customInput/InputSelectHolder.js
 import InputArrowTransaction from "../../components/customInput/InputArrowTransaction.jsx";
 import InputText from "../../components/customInput/InputText.jsx";
 import InputDatetime from "../../components/customInput/InputDatetime.jsx";
-import {getLocalTimeZone, now, parseAbsolute, parseDateTime} from "@internationalized/date";
+import {getLocalTimeZone, now, parseAbsolute, parseAbsoluteToLocal, parseDateTime} from "@internationalized/date";
 import callApi from "../../apis/GatewayApi.js";
 import {formatNumber, formatZoneTimeToString, removeMilliseconds, revertFormatNumber} from "../../common/common.js";
 import toast from "react-hot-toast";
@@ -44,7 +44,7 @@ const UpdateTransaction = (props) => {
 			setValue('holder', data[0].FK_BUD_HOLDER)
 			setValue('amount', formatNumber(data[0].C_CASH_IN ? data[0].C_CASH_IN : data[0].C_CASH_OUT))
 			setValue('note', data[0].C_NOTE)
-			setValue('date', parseAbsolute(data[0].C_DATE))
+			setValue('date', parseAbsoluteToLocal(data[0].C_DATE))
 			setValue('stateArrow', data[0].C_CASH_IN ? 'UP' : 'DOWN')
 		})
 	}
