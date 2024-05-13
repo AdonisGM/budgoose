@@ -67,7 +67,7 @@ const showToastError = (errorMessage) => {
 }
 
 const callRefreshToken = (onSuccess) => {
-    const refreshToken = Cookies.get('refresh_token');
+    const refreshToken = Cookies.get('info');
     if (!refreshToken) {
         removeToken();
     }
@@ -98,8 +98,7 @@ const recallApi = () => {
 }
 
 const removeToken = () => {
-    Cookies.remove('access_token', {path: '/', domain: DOMAIN_COOKIE});
-    Cookies.remove('refresh_token', {path: '/', domain: DOMAIN_COOKIE});
+    Cookies.remove('info', {path: '/', domain: DOMAIN_COOKIE});
     window.location.href = '/';
 }
 
