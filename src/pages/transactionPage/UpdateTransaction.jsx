@@ -18,7 +18,7 @@ const UpdateTransaction = (props) => {
 	const { control, handleSubmit, reset } = useForm({
 		defaultValues: {
 			holder: '',
-			cash: '',
+			amount: '',
 			note: '',
 			date: now(getLocalTimeZone()),
 			stateArrow: 'UP'
@@ -34,8 +34,8 @@ const UpdateTransaction = (props) => {
 
 		callApi('pkg_bud_management.update_item', {
 			fk_bud_holder: data.holder,
-			cash_in: data.cash === 'UP' ? revertFormatNumber(data.cash) : 0,
-			cash_out: data.cash === 'DOWN' ? revertFormatNumber(data.cash) : 0,
+			cash_in: data.amount === 'UP' ? revertFormatNumber(data.amount) : 0,
+			cash_out: data.amount === 'DOWN' ? revertFormatNumber(data.amount) : 0,
 			note: data.note,
 			type: 'NORMAL',
 			date: formatZoneTimeToString(data.date),
@@ -69,6 +69,7 @@ const UpdateTransaction = (props) => {
 							<InputArrowTransaction
 								name={'stateArrow'}
 								control={control}
+								isDisabled={false}
 							/>
 							<InputNumber
 								name={'amount'}

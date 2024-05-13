@@ -29,7 +29,7 @@ const InputAutocomplete = (props) => {
 			size={'sm'}
 			defaultItems={props.data}
 			type={'text'}
-			variant={'bordered'}
+			variant={'flat'}
 			label={<div className={'flex items-center justify-center gap-1'}>
 				{props.label} {!!props.rules?.required && <IconAsterisk size={10} className={'text-rose-600'}/>}
 			</div>}
