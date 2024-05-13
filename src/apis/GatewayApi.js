@@ -67,12 +67,7 @@ const showToastError = (errorMessage) => {
 }
 
 const callRefreshToken = (onSuccess) => {
-    const refreshToken = Cookies.get('info');
-    if (!refreshToken) {
-        removeToken();
-    }
-
-    const optionFetch = createOptionFetch({refresh_token: refreshToken})
+    const optionFetch = createOptionFetch({})
     fetch(URL_REFRESH_TOKEN, optionFetch)
         .then((res) => {
             if (res.ok) {
