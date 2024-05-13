@@ -19,3 +19,7 @@ export const formatZoneTimeToString = (date) => {
 export const convertStringToDate = (str) => {
 	return moment(str).format('DD/MM/YYYY HH:mm:ss')
 }
+
+export const removeMilliseconds = (stringDate) => {
+	return stringDate.split('.')[0]+"Z"
+}

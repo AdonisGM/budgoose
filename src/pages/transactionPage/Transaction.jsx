@@ -14,6 +14,7 @@ import TableLoading from "../../layout/TableLoading.jsx";
 import TableEmpty from "../../layout/TableEmpty.jsx";
 import UpdateTransaction from "./UpdateTransaction.jsx";
 import {IconArrowBigUpFilled, IconEdit, IconTrashX} from "@tabler/icons-react";
+import { confirmWrapper, confirm } from '../../components/alert/createConfirmation.js'
 import toast from "react-hot-toast";
 
 const Transaction = () => {
@@ -51,16 +52,38 @@ const Transaction = () => {
 		getAllManagement()
 	}
 
-	const handlerDelete = (id) => {
-		setIsLoading(true)
-		callApi('pkg_bud_management.delete_item', {
-			pk_bud_management: id
-		}, () => {
-			toast.success('Delete successfully.')
-			getAllManagement()
-		}, (err) => {
-			console.log(err)
-		})
+	const handleOnClick = async (id) => {
+		if (await confirm({
+			confirmation: 'Are you sure you want to delete this transaction?',
+			options: {
+				confirm: {
+					text: 'Delete',
+					color: 'danger'
+				}
+			}
+		})) {
+			setIsLoading(true)
+			callApi('pkg_bud_management.delete_item', {
+				pk_bud_management: id
+			}, () => {
+				toast.success('Delete successfully.')
+				getAllManagement()
+			}, (err) => {
+				console.log(err)
+			})
+		}
+	}
+
+	const handleOpenCreate = (id) => {
+		setIdSelected(undefined)
+		setMode('create')
+		onOpen(true)
+	}
+
+	const handleOpenDetail = (id) => {
+		setIdSelected(id)
+		setMode('edit')
+		onOpen(true)
 	}
 
 	return (
@@ -78,7 +101,7 @@ const Transaction = () => {
 					size="sm"
 					variant="flat"
 					color="primary"
-					onClick={onOpen}
+					onClick={handleOpenCreate}
 				>
 					Add transaction
 				</Button>
@@ -134,11 +157,12 @@ const Transaction = () => {
 										<IconEdit
 											className={'text-blue-500 cursor-pointer'}
 											size={16}
+											onClick={() => {handleOpenDetail(item?.PK_BUD_MANAGEMENT)}}
 										/>
 										<IconTrashX
 											className={'text-rose-500 cursor-pointer'}
 											size={16}
-											onClick={() => {handlerDelete(item?.PK_BUD_MANAGEMENT)}}
+											onClick={() => {handleOnClick(item?.PK_BUD_MANAGEMENT)}}
 										/>
 									</div>
 								</TableCell>

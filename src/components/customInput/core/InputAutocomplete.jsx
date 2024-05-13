@@ -2,6 +2,7 @@ import {Autocomplete, AutocompleteItem} from "@nextui-org/react";
 import PropTypes from "prop-types";
 import {IconAsterisk} from "@tabler/icons-react";
 import {useController} from "react-hook-form";
+import {useEffect} from "react";
 
 const InputAutocomplete = (props) => {
 	const {
@@ -19,7 +20,7 @@ const InputAutocomplete = (props) => {
 			// react form hook
 			onSelectionChange={field.onChange}
 			onBlur={field.onBlur}
-			value={field.value}
+			selectedKey={field.value}
 			ref={field.ref}
 
 			// nextUI

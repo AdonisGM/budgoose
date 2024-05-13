@@ -6,7 +6,9 @@ const Footer = () => {
 		<Card className={'h-12 min-w-12'} isPressable={true}>
 			<CardBody>
 				<div className={'h-full w-full flex justify-center items-center overflow-hidden'}>
-					<IconPower size={18} className={'text-red-600'}/>
+					<IconPower size={18} className={'text-red-600'} onClick={() => {
+						document.location.href = import.meta.env.VITE_SSO_URL + '/settings'
+					}}/>
 				</div>
 			</CardBody>
 		</Card>

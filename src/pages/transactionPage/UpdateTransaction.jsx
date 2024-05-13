@@ -6,33 +6,54 @@ import InputSelectHolder from "../../components/customInput/InputSelectHolder.js
 import InputArrowTransaction from "../../components/customInput/InputArrowTransaction.jsx";
 import InputText from "../../components/customInput/InputText.jsx";
 import InputDatetime from "../../components/customInput/InputDatetime.jsx";
-import {getLocalTimeZone, now} from "@internationalized/date";
+import {getLocalTimeZone, now, parseAbsolute, parseDateTime} from "@internationalized/date";
 import callApi from "../../apis/GatewayApi.js";
-import {formatZoneTimeToString, revertFormatNumber} from "../../common/common.js";
+import {formatZoneTimeToString, removeMilliseconds, revertFormatNumber} from "../../common/common.js";
 import toast from "react-hot-toast";
 import {useForm} from "react-hook-form";
 
 const UpdateTransaction = (props) => {
 	const [stateUpdate, setStateUpdate] = useState('init')
 
-	const { control, handleSubmit, reset } = useForm({
+	const { control, handleSubmit, reset, setValue } = useForm({
 		defaultValues: {
 			holder: '',
 			amount: '',
 			note: '',
-			date: now(getLocalTimeZone()),
+			date: undefined,
 			stateArrow: 'UP'
 		}
 	})
 
 	useEffect(() => {
-		reset();
+		if (props.isOpen) {
+			if (props.mode === 'edit') {
+				getDetailTransaction()
+			}	else {
+				setValue('date', now(getLocalTimeZone()))
+			}
+		} else {
+			reset();
+		}
 	}, [props.isOpen]);
+
+	const getDetailTransaction = () => {
+		callApi('pkg_bud_management.get_item', {
+			pk_bud_management: props.id
+		}, (data) => {
+			setValue('holder', data[0].FK_BUD_HOLDER)
+			setValue('amount', data[0].C_CASH_IN ? data[0].C_CASH_IN : data[0].C_CASH_OUT)
+			setValue('note', data[0].C_NOTE)
+			setValue('date', parseAbsolute(data[0].C_DATE))
+			setValue('stateArrow', data[0].C_CASH_IN ? 'UP' : 'DOWN')
+		})
+	}
 
 	const onSubmit = (data, onClose) => {
 		setStateUpdate('pending')
 
 		callApi('pkg_bud_management.update_item', {
+			pk_bud_management: props.id,
 			fk_bud_holder: data.holder,
 			cash_in: data.stateArrow === 'UP' ? revertFormatNumber(data.amount) : 0,
 			cash_out: data.stateArrow === 'DOWN' ? revertFormatNumber(data.amount) : 0,
