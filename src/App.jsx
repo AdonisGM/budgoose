@@ -23,7 +23,7 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/",
-		element: <Auth></></Auth>,
+		element: <Auth><MainLayout/></Auth>,
 		children: [
 			{
 				path: "/transaction",
@@ -32,7 +32,7 @@ const router = createBrowserRouter([
 			{
 				path: "/holder",
 				element: <HolderPage/>,
-			},
+			}
 		]
 	},
 	{
