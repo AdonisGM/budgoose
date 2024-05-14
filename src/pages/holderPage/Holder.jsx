@@ -78,8 +78,8 @@ const Holder = () => {
 			}
 		})) {
 			setIsLoading(true)
-			callApi('pkg_bud_management.delete_item', {
-				pk_bud_management: id
+			callApi('pkg_bud_holder.delete_item', {
+				pk_bud_holder: id
 			}, () => {
 				toast.success('Delete successfully.')
 				getAllManagement()
