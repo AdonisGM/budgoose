@@ -19,7 +19,7 @@ const listNavbarItem = [
 ]
 
 const Navbar = () => {
-	return <Card className={'h-full'}>
+	return <Card className={'overflow-auto flex-grow'}>
 		<CardBody>
 			{listNavbarItem.map((item, index) => (
 				<NavLink to={item.url} key={index}>
@@ -33,7 +33,6 @@ const Navbar = () => {
 					)}
 				</NavLink>
 			))}
-
 		</CardBody>
 	</Card>
 }

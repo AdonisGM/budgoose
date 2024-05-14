@@ -2,7 +2,7 @@ import {Card, CardBody} from "@nextui-org/react";
 import {IconBrandGithubFilled, IconPower} from "@tabler/icons-react";
 
 const Footer = () => {
-	return <div className={'flex flex-row gap-3'}>
+	return <div className={'flex flex-row gap-3 mt-3'}>
 		<Card className={'h-12 min-w-12'} isPressable={true}>
 			<CardBody>
 				<div className={'h-full w-full flex justify-center items-center overflow-hidden'}>

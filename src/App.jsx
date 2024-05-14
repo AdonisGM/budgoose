@@ -23,7 +23,7 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/",
-		element: <Auth><MainLayout/></Auth>,
+		element: <Auth></></Auth>,
 		children: [
 			{
 				path: "/transaction",
@@ -67,6 +67,12 @@ function App() {
 	return (
 		<div>
 			<RouterProvider router={router}/>
+			<Toaster
+				toastOptions={{
+					className: 'bg-default-900 text-white text-sm',
+				}}
+				position="top-right"
+			/>
 		</div>
 	)
 }
