@@ -7,7 +7,7 @@ import {
 import {Button, Card} from "@nextui-org/react";
 import {Fragment, useEffect} from "react";
 import {Toaster} from "react-hot-toast";
-import Welcome from "./components/welcome/welcome.jsx";
+import Welcome from "./pages/welcomePage/Welcome.jsx";
 import Cookies from "js-cookie";
 import MainLayout from "./layout/MainLayout.jsx";
 import TransactionPage from "./pages/TransactionPage.jsx";
