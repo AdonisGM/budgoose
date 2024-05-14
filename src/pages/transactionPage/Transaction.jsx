@@ -74,7 +74,7 @@ const Transaction = () => {
 		}
 	}
 
-	const handleOpenCreate = (id) => {
+	const handleOpenCreate = () => {
 		setIdSelected(undefined)
 		setMode('create')
 		onOpen(true)

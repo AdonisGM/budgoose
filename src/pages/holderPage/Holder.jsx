@@ -69,7 +69,7 @@ const Holder = () => {
 
 	const handleOnClick = async (id) => {
 		if (await confirm({
-			confirmation: 'Are you sure you want to delete this transaction?',
+			confirmation: 'Are you sure you want to delete this holder?',
 			options: {
 				confirm: {
 					text: 'Delete',

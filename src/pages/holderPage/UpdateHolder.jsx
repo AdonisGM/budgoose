@@ -32,7 +32,7 @@ const UpdateHolder = (props) => {
 		callApi('pkg_bud_holder.get_item', {
 			pk_bud_holder: props.id
 		}, (data) => {
-			setValue('name', data[0].C_NAME)
+			setValue('name', data[0].C_HOLDER_NAME)
 			setValue('note', data[0].C_NOTE)
 		})
 	}
@@ -67,6 +67,9 @@ const UpdateHolder = (props) => {
 								label={'Name holder'}
 								placeholder={'Your friend or ...'}
 								control={control}
+								rules={{
+									required: 'Field is required'
+								}}
 							/>
 							<InputText
 								name={'note'}
