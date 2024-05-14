@@ -1,10 +1,24 @@
 import {Fragment, useEffect, useState} from "react";
-import {Pagination, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow} from "@nextui-org/react";
+import {
+	Button,
+	Pagination,
+	Table,
+	TableBody,
+	TableCell,
+	TableColumn,
+	TableHeader,
+	TableRow,
+	useDisclosure
+} from "@nextui-org/react";
 import TableLoading from "../../layout/TableLoading.jsx";
 import TableEmpty from "../../layout/TableEmpty.jsx";
 import {IconArrowBigUpFilled, IconEdit, IconTrashX} from "@tabler/icons-react";
 import {formatDate, formatNumber} from "../../common/common.js";
 import callApi from "../../apis/GatewayApi.js";
+import UpdateTransaction from "../transactionPage/UpdateTransaction.jsx";
+import UpdateHolder from "./UpdateHolder.jsx";
+import {confirm} from "../../components/alert/createConfirmation.js";
+import toast from "react-hot-toast";
 
 const Holder = () => {
 	const [page, setPage] = useState(1)
@@ -14,9 +28,15 @@ const Holder = () => {
 	const [mode, setMode] = useState()
 	const [idSelected, setIdSelected] = useState(undefined)
 
+	const {isOpen, onOpen, onOpenChange} = useDisclosure();
+
 	useEffect(() => {
 		getAllManagement()
 	}, [page]);
+
+	const handlerSuccess = () => {
+		getAllManagement()
+	}
 
 	const getAllManagement = () => {
 		setIsLoading(true)
@@ -35,8 +55,60 @@ const Holder = () => {
 		})
 	}
 
+	const handleOpenCreate = () => {
+		setIdSelected(undefined)
+		setMode('create')
+		onOpen(true)
+	}
+
+	const handleOpenDetail = (id) => {
+		setIdSelected(id)
+		setMode('edit')
+		onOpen(true)
+	}
+
+	const handleOnClick = async (id) => {
+		if (await confirm({
+			confirmation: 'Are you sure you want to delete this transaction?',
+			options: {
+				confirm: {
+					text: 'Delete',
+					color: 'danger'
+				}
+			}
+		})) {
+			setIsLoading(true)
+			callApi('pkg_bud_management.delete_item', {
+				pk_bud_management: id
+			}, () => {
+				toast.success('Delete successfully.')
+				getAllManagement()
+			}, (err) => {
+				console.log(err)
+			})
+		}
+	}
+
 	return (
 		<Fragment>
+			<UpdateHolder
+				mode={mode}
+				id={idSelected}
+				isOpen={isOpen}
+				onClose={() => {}}
+				onOpenChange={onOpenChange}
+				onSuccess={handlerSuccess}
+			/>
+			<div className={'text-right'}>
+				<Button
+					size="sm"
+					variant="flat"
+					color="primary"
+					onClick={handleOpenCreate}
+				>
+					Add transaction
+				</Button>
+			</div>
 			<div className={'mt-5'}>
 				<Table
 					isStriped={true}
@@ -87,10 +159,12 @@ const Holder = () => {
 										<IconEdit
 											className={'text-blue-500 cursor-pointer'}
 											size={16}
+											onClick={() => {handleOpenDetail(item?.PK_BUD_HOLDER)}}
 										/>
 										<IconTrashX
 											className={'text-rose-500 cursor-pointer'}
 											size={16}
+											onClick={() => {handleOnClick(item?.PK_BUD_HOLDER)}}
 										/>
 									</div>
 								</TableCell>

@@ -130,7 +130,7 @@ const Transaction = () => {
 						<TableColumn key="TB_ROW_NUM">#</TableColumn>
 						<TableColumn key="C_HOLDER_NAME">Name</TableColumn>
 						<TableColumn key="C_CASH_IN">Cash</TableColumn>
-						<TableColumn key="C_NOTE">NOTE</TableColumn>
+						<TableColumn key="C_NOTE">Note</TableColumn>
 						<TableColumn key="C_DATE">Date</TableColumn>
 						<TableColumn>Action</TableColumn>
 					</TableHeader>
