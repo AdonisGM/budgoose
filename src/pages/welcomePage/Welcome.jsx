@@ -1,4 +1,4 @@
-import {Button, Card, CardBody, Spacer} from "@nextui-org/react";
+import {Button, Card, CardBody, CircularProgress, Spacer} from "@nextui-org/react";
 import {useEffect, useState} from "react";
 import Cookies from "js-cookie";
 import {IconArrowBigRightFilled, IconBrandGithubFilled} from "@tabler/icons-react";
@@ -26,7 +26,7 @@ const quotes = [
 
 const buttonContent = {
 	login: 'Login with SSO',
-	register: 'Register',
+	register: 'Register service',
 }
 
 const Welcome = () => {
@@ -55,7 +55,7 @@ const Welcome = () => {
 
 			navigate(`/transaction`);
 		});
-	}, [stateButton]);
+	}, []);
 
 	const handleLogin = () => {
 		const redirect_uri = encodeURIComponent(window.location.origin);
@@ -101,9 +101,9 @@ const Welcome = () => {
 					<Spacer y={16}/>
 					<Button
 						size="md"
-						className={'bg-default-900 text-white'}
+						className={'bg-default-900 text-white w-[160px]'}
 						onClick={handleClickButton}
-						isLoading={isRegistering && stateButton === 'register'}
+						isLoading={isRegistering}
 					>
 						{buttonContent[stateButton]}
 					</Button>
