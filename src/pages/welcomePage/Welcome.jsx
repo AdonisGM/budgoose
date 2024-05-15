@@ -41,7 +41,6 @@ const Welcome = () => {
 		// check register if login
 		if (Cookies.get('info') === undefined) {
 			setStateButton('login')
-			return;
 		}
 
 		// check register service
