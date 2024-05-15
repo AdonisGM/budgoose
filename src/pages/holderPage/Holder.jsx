@@ -106,7 +106,7 @@ const Holder = () => {
 					color="primary"
 					onClick={handleOpenCreate}
 				>
-					Add transaction
+					Add holder
 				</Button>
 			</div>
 			<div className={'mt-5'}>
