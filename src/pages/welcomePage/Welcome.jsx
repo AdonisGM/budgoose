@@ -41,6 +41,7 @@ const Welcome = () => {
 		// check register if login
 		if (Cookies.get('info') === undefined) {
 			setStateButton('login')
+			return
 		}
 
 		// check register service
@@ -57,7 +58,7 @@ const Welcome = () => {
 		}, () => {
 
 		});
-	}, [stateButton]);
+	}, []);
 
 	const handleLogin = () => {
 		const redirect_uri = encodeURIComponent(window.location.origin);
