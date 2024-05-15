@@ -107,7 +107,7 @@ const Welcome = () => {
 						onClick={handleClickButton}
 						isLoading={isChecking}
 					>
-						{isChecking && buttonContent[stateButton]}
+						{!isChecking && buttonContent[stateButton]}
 					</Button>
 					<Spacer y={14}/>
 					<div className={'flex flex-col items-center justify-center'}>
