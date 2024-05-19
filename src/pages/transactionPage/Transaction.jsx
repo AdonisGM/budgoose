@@ -16,6 +16,7 @@ import UpdateTransaction from "./UpdateTransaction.jsx";
 import {IconArrowBigUpFilled, IconEdit, IconTrashX} from "@tabler/icons-react";
 import { confirmWrapper, confirm } from '../../components/alert/createConfirmation.js'
 import toast from "react-hot-toast";
+import CalculateInvoice from "./CalculateInvoice.jsx";
 
 const Transaction = () => {
 	const [page, setPage] = useState(1)
@@ -26,6 +27,7 @@ const Transaction = () => {
 	const [idSelected, setIdSelected] = useState(undefined)
 
 	const {isOpen, onOpen, onOpenChange} = useDisclosure();
+	const disclosureCalcInvoice = useDisclosure();
 
 	useEffect(() => {
 		getAllManagement()
@@ -86,6 +88,10 @@ const Transaction = () => {
 		onOpen(true)
 	}
 
+	const handleOpenCalculateInvoice = () => {
+		disclosureCalcInvoice.onOpen(true)
+	}
+
 	return (
 		<Fragment>
 			<UpdateTransaction
@@ -96,7 +102,20 @@ const Transaction = () => {
 				onOpenChange={onOpenChange}
 				onSuccess={handlerSuccess}
 			/>
-			<div className={'text-right'}>
+			<CalculateInvoice
+				isOpen={disclosureCalcInvoice.isOpen}
+				onClose={() => {}}
+				onOpenChange={disclosureCalcInvoice.onOpenChange}
+			/>
+			<div className={'flex items-center justify-end gap-3'}>
+				<Button
+					size="sm"
+					variant="flat"
+					color="primary"
+					onClick={handleOpenCalculateInvoice}
+				>
+					Calculate Invoice
+				</Button>
 				<Button
 					size="sm"
 					variant="flat"
