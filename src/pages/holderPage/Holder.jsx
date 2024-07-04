@@ -19,6 +19,7 @@ import UpdateTransaction from "../transactionPage/UpdateTransaction.jsx";
 import UpdateHolder from "./UpdateHolder.jsx";
 import {confirm} from "../../components/alert/createConfirmation.js";
 import toast from "react-hot-toast";
+import RenderCash from "../../components/renderCash/RenderCash.jsx";
 
 const Holder = () => {
 	const [page, setPage] = useState(1)
@@ -150,7 +151,7 @@ const Holder = () => {
 								<TableCell>{item?.C_HOLDER_NAME}</TableCell>
 								<TableCell>
 									<div className={`flex gap-1 ${item?.C_CASH_BALANCE >= 0 ? `text-green-500` : `text-rose-500`}`}>
-										{formatNumber(item?.C_CASH_BALANCE)}
+										<RenderCash cash={item?.C_CASH_BALANCE}/>
 									</div>
 								</TableCell>
 								<TableCell>{item?.C_NOTE}</TableCell>

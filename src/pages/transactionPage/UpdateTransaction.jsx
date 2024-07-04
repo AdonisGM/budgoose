@@ -11,19 +11,24 @@ import callApi from "../../apis/GatewayApi.js";
 import {formatNumber, formatZoneTimeToString, removeMilliseconds, revertFormatNumber} from "../../common/common.js";
 import toast from "react-hot-toast";
 import {useForm} from "react-hook-form";
+import InputSelectWallet from "../../components/customInput/InputSelectWallet.jsx";
+import InputSwitch from "../../components/customInput/InputSwitch.jsx";
 
 const UpdateTransaction = (props) => {
 	const [stateUpdate, setStateUpdate] = useState('init')
 
-	const { control, handleSubmit, reset, setValue } = useForm({
+	const { control, handleSubmit, reset, setValue, getValues, watch } = useForm({
 		defaultValues: {
 			holder: '',
+			wallet: '',
 			amount: '',
 			note: '',
 			date: undefined,
-			stateArrow: 'UP'
+			stateArrow: 'UP',
+			autoCreateTransfer: true
 		}
 	})
+	const watchShowAge = watch("stateArrow")
 
 	useEffect(() => {
 		if (props.isOpen) {
@@ -42,10 +47,12 @@ const UpdateTransaction = (props) => {
 			pk_bud_management: props.id
 		}, (data) => {
 			setValue('holder', data[0].FK_BUD_HOLDER)
+			setValue('wallet', data[0].FK_BUD_WALLET)
 			setValue('amount', formatNumber(data[0].C_CASH_IN ? data[0].C_CASH_IN : data[0].C_CASH_OUT))
 			setValue('note', data[0].C_NOTE)
 			setValue('date', parseAbsoluteToLocal(data[0].C_DATE))
 			setValue('stateArrow', data[0].C_CASH_IN ? 'UP' : 'DOWN')
+			setValue('autoCreateTransfer', !!data[0].FK_BUD_WALLET_TRANS)
 		})
 	}
 
@@ -55,11 +62,13 @@ const UpdateTransaction = (props) => {
 		callApi('pkg_bud_management.update_item', {
 			pk_bud_management: props.id,
 			fk_bud_holder: data.holder,
+			fk_bud_wallet: data.wallet,
 			cash_in: data.stateArrow === 'UP' ? revertFormatNumber(data.amount) : 0,
 			cash_out: data.stateArrow === 'DOWN' ? revertFormatNumber(data.amount) : 0,
 			note: data.note,
 			type: 'NORMAL',
 			date: formatZoneTimeToString(data.date),
+			auto_create_transfer: data.stateArrow === 'UP' ? 1 : data.autoCreateTransfer ? 1 : 0
 		}, () => {
 			toast.success('Create successfully.')
 			setStateUpdate('init')
@@ -81,6 +90,15 @@ const UpdateTransaction = (props) => {
 							name={'holder'}
 							label={'Holder'}
 							placeholder={'Please select the holder'}
+							control={control}
+							rules={{
+								required: 'Field is required'
+							}}
+						/>
+						<InputSelectWallet
+							name={'wallet'}
+							label={'Wallet'}
+							placeholder={'Please select the wallet'}
 							control={control}
 							rules={{
 								required: 'Field is required'
@@ -113,6 +131,11 @@ const UpdateTransaction = (props) => {
 								control={control}
 							/>
 						</div>
+						{watchShowAge === 'DOWN' && <InputSwitch
+							name={'autoCreateTransfer'}
+							label={'Auto create transfer'}
+							control={control}
+						/>}
 						<InputText
 							name={'note'}
 							label={'Note'}

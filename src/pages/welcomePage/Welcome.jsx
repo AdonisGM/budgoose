@@ -55,7 +55,7 @@ const Welcome = () => {
 				return
 			}
 
-			navigate(`/transaction`);
+			navigate(`/dashboard`);
 		}, () => {
 
 		});
@@ -72,7 +72,7 @@ const Welcome = () => {
 		callApi('pkg_user.register_service', {
 			service: 'budgoose',
 		}, () => {
-			navigate(`/transaction`);
+			navigate(`/dashboard`);
 		});
 	}
 

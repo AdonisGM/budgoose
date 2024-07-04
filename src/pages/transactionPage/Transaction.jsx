@@ -17,6 +17,7 @@ import {IconArrowBigUpFilled, IconEdit, IconTrashX} from "@tabler/icons-react";
 import { confirmWrapper, confirm } from '../../components/alert/createConfirmation.js'
 import toast from "react-hot-toast";
 import CalculateInvoice from "./CalculateInvoice.jsx";
+import RenderCash from "../../components/renderCash/RenderCash.jsx";
 
 const Transaction = () => {
 	const [page, setPage] = useState(1)
@@ -166,7 +167,7 @@ const Transaction = () => {
 								<TableCell>
 									<div className={'flex items-center gap-1 h-full'}>
 										<IconArrowBigUpFilled className={`${item?.C_CASH_IN !== 0 ? `text-green-500` : `text-rose-500 rotate-180`}`} size={14}/>
-										{formatNumber(item?.C_CASH_IN === 0 ? item?.C_CASH_OUT : item?.C_CASH_IN)}
+										<RenderCash cash={item?.C_CASH_IN === 0 ? item?.C_CASH_OUT : item?.C_CASH_IN}/>
 									</div>
 								</TableCell>
 								<TableCell>{item?.C_NOTE}</TableCell>

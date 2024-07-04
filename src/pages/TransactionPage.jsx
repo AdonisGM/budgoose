@@ -6,7 +6,7 @@ const TransactionPage = () => {
 		document.title = "Transaction | AdonisGM";
 	}, []);
 
-	return <Transaction/>
+	return <div className={'container mx-auto'}><Transaction/></div>
 }
 
 export default TransactionPage

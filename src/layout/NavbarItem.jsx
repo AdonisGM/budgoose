@@ -18,6 +18,21 @@ const configColor = {
 		backgroundColor: 'bg-orange-200',
 		backgroundColor1: 'bg-orange-100',
 	},
+	green: {
+		textColor: 'text-green-600',
+		backgroundColor: 'bg-green-200',
+		backgroundColor1: 'bg-green-100',
+	},
+	fuchsia: {
+		textColor: 'text-fuchsia-600',
+		backgroundColor: 'bg-fuchsia-200',
+		backgroundColor1: 'bg-fuchsia-100',
+	},
+	blue: {
+		textColor: 'text-blue-600',
+		backgroundColor: 'bg-blue-200',
+		backgroundColor1: 'bg-blue-100',
+	},
 	default: {
 		textColor: 'text-slate-600',
 		backgroundColor: 'bg-slate-200',

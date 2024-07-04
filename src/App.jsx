@@ -1,11 +1,9 @@
-import {motion, useAnimate} from "framer-motion";
 import './App.css'
 import {
 	createBrowserRouter,
 	RouterProvider,
 } from "react-router-dom";
-import {Button, Card} from "@nextui-org/react";
-import {Fragment, useEffect} from "react";
+import {useEffect} from "react";
 import {Toaster} from "react-hot-toast";
 import Welcome from "./pages/welcomePage/Welcome.jsx";
 import Cookies from "js-cookie";
@@ -15,6 +13,9 @@ import HolderPage from "./pages/HolderPage.jsx";
 import Auth from "./components/auth/Auth.jsx";
 import Test from "./pages/testPage/Test.jsx";
 import ErrorBoundary from "./pages/errorPage/ErrorBoundary.jsx";
+import WalletPage from "./pages/WalletPage.jsx";
+import TransferPage from "./pages/TransferPage.jsx";
+import DashboardPage from "./pages/DashboardPage.jsx";
 
 const router = createBrowserRouter([
 	{
@@ -26,12 +27,24 @@ const router = createBrowserRouter([
 		element: <Auth><MainLayout/></Auth>,
 		children: [
 			{
-				path: "/transaction",
+				path: "/dashboard",
+				element: <DashboardPage/>,
+			},
+			{
+				path: "/loan",
 				element: <TransactionPage/>,
 			},
 			{
 				path: "/holder",
 				element: <HolderPage/>,
+			},
+			{
+				path: "/wallet",
+				element: <WalletPage/>,
+			},
+			{
+				path: "/transfer",
+				element: <TransferPage/>,
 			}
 		]
 	},

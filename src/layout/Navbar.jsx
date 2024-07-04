@@ -1,14 +1,32 @@
 import {Card, CardBody} from "@nextui-org/react";
 import NavbarItem from "./NavbarItem.jsx";
-import {IconTrendingUp, IconUsers} from "@tabler/icons-react";
+import {IconLayoutDashboard, IconTransformFilled, IconTrendingUp, IconUsers, IconWallet} from "@tabler/icons-react";
 import {NavLink} from "react-router-dom";
 
 const listNavbarItem = [
 	{
-		name: "Transaction",
+		name: "Dashboard",
+		icon: IconLayoutDashboard,
+		color: 'green',
+		url: '/dashboard',
+	},
+	{
+		name: "Wallet",
+		icon: IconWallet,
+		color: 'fuchsia',
+		url: '/wallet',
+	},
+	{
+		name: "Transfer",
+		icon: IconTransformFilled,
+		color: 'blue',
+		url: '/transfer',
+	},
+	{
+		name: "Loan",
 		icon: IconTrendingUp,
 		color: 'sky',
-		url: '/transaction',
+		url: '/loan',
 	},
 	{
 		name: "Holder",

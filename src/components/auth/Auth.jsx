@@ -12,7 +12,7 @@ const Auth = ({children}) => {
 
         if (info === undefined) {
             Cookie.remove('info', {path: '/', domain: import.meta.env.VITE_DOMAIN_COOKIE});
-            navigate('/login');
+            navigate('/');
         }
 
         document.title = 'Budgoose | AdonisGM';
