@@ -1,6 +1,16 @@
 import {Fragment, useEffect, useState} from "react";
 import callApi from "../../apis/GatewayApi.js";
-import {Pagination, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow} from "@nextui-org/react";
+import {
+    Button,
+    Pagination,
+    Table,
+    TableBody,
+    TableCell,
+    TableColumn,
+    TableHeader,
+    TableRow,
+    useDisclosure
+} from "@nextui-org/react";
 import TableLoading from "../../layout/TableLoading.jsx";
 import TableEmpty from "../../layout/TableEmpty.jsx";
 import {formatDate, formatNumber} from "../../common/common.js";
@@ -8,12 +18,20 @@ import {IconEdit, IconTrashX} from "@tabler/icons-react";
 import RenderCash from "../../components/renderCash/RenderCash.jsx";
 import {confirm} from "../../components/alert/createConfirmation.js";
 import toast from "react-hot-toast";
+import UpdateTransaction from "../transactionPage/UpdateTransaction.jsx";
+import UpdateTransfer from "./UpdateTransfer.jsx";
+import UpdateTransferWallet from "./UpdateTransferWallet.jsx";
 
 const Transfer = (props) => {
     const [page, setPage] = useState(1)
     const [pages, setPages] = useState(0)
     const [data, setData] = useState([])
     const [isLoading, setIsLoading] = useState(false)
+    const [mode, setMode] = useState()
+    const [idSelected, setIdSelected] = useState(undefined)
+
+    const {isOpen, onOpen, onOpenChange} = useDisclosure();
+    const disclosureCalcInvoice = useDisclosure();
 
     useEffect(() => {
         getAllManagement()
@@ -58,8 +76,69 @@ const Transfer = (props) => {
         }
     }
 
+    const handleOpenCreate = () => {
+        setIdSelected(undefined)
+        setMode('create')
+        onOpen(true)
+    }
+
+    const handleOpenDetail = (id, transType) => {
+        setIdSelected(id)
+        setMode('edit')
+
+        if (transType === 'WALLET') {
+            disclosureCalcInvoice.onOpen(true)
+        } else {
+            onOpen(true)
+        }
+    }
+
+    const handleOpenTransferWallet = () => {
+        disclosureCalcInvoice.onOpen(true)
+    }
+
+    const handlerSuccess = () => {
+        getAllManagement()
+    }
+
     return (
         <Fragment>
+            <UpdateTransfer
+                mode={mode}
+                id={idSelected}
+                isOpen={isOpen}
+                onClose={() => {
+                }}
+                onOpenChange={onOpenChange}
+                onSuccess={handlerSuccess}
+            />
+            <UpdateTransferWallet
+                mode={mode}
+                id={idSelected}
+                isOpen={disclosureCalcInvoice.isOpen}
+                onClose={() => {
+                }}
+                onOpenChange={disclosureCalcInvoice.onOpenChange}
+                onSuccess={handlerSuccess}
+            />
+            <div className={'flex items-center justify-end gap-3'}>
+                <Button
+                    size="sm"
+                    variant="flat"
+                    color="primary"
+                    onClick={handleOpenCreate}
+                >
+                    Add transfer
+                </Button>
+                <Button
+                    size="sm"
+                    variant="flat"
+                    color="primary"
+                    onClick={handleOpenTransferWallet}
+                >
+                    Transfer wallet
+                </Button>
+            </div>
             <div className={'mt-5'}>
                 <Table
                     isStriped={true}
@@ -100,8 +179,12 @@ const Transfer = (props) => {
                             <TableRow key={item?.PK_BUD_WALLET_TRANSACTION}>
                                 <TableCell>{item?.TB_ROW_NUM}</TableCell>
                                 <TableCell>{item?.C_WALLET_NAME}</TableCell>
-                                <TableCell><div className={'text-red-600'}><RenderCash cash={item?.C_CASH_OUT}/></div></TableCell>
-                                <TableCell><div className={'text-green-600'}><RenderCash cash={item?.C_CASH_IN}/></div></TableCell>
+                                <TableCell>
+                                    <div className={'text-red-600'}><RenderCash cash={item?.C_CASH_OUT}/></div>
+                                </TableCell>
+                                <TableCell>
+                                    <div className={'text-green-600'}><RenderCash cash={item?.C_CASH_IN}/></div>
+                                </TableCell>
                                 <TableCell>{item?.C_WALLET_TARGET_NAME}</TableCell>
                                 <TableCell>{formatDate(item?.C_DATE)}</TableCell>
                                 <TableCell>{item?.C_NOTE}</TableCell>
@@ -111,7 +194,7 @@ const Transfer = (props) => {
                                             <IconEdit
                                                 className={'text-blue-500 cursor-pointer'}
                                                 size={16}
-                                                // onClick={() => {handleOpenDetail(item?.PK_BUD_WALLET_TRANSACTION)}}
+                                                onClick={() => {handleOpenDetail(item?.PK_BUD_WALLET_TRANSACTION, item?.C_TRANSACTION_TYPE)}}
                                             />
                                             <IconTrashX
                                                 className={'text-rose-500 cursor-pointer'}
