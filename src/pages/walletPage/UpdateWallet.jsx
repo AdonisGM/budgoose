@@ -86,8 +86,8 @@ const UpdateWallet = (props) => {
 							rules={{
 								required: 'Field is required',
 								min: {
-									value: 1,
-									message: 'Must larger than 0'
+									value: 0,
+									message: 'Must larger or equal 0'
 								}
 							}}
 							isDisabled={props.mode === 'edit'}
