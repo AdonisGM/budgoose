@@ -100,9 +100,6 @@ const UpdateTransaction = (props) => {
 							label={'Wallet'}
 							placeholder={'Please select the wallet'}
 							control={control}
-							rules={{
-								required: 'Field is required'
-							}}
 						/>
 						<div className={'flex flex-row gap-1 justify-center items-start'}>
 							<InputArrowTransaction
