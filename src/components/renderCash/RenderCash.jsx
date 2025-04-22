@@ -7,7 +7,7 @@ const RenderCash = (props) => {
     const hideAmount = useSelector((state) => state.hideAmount.value)
     const dispatch = useDispatch()
 
-    const [preview, setPreview] = useState(hideAmount)
+    const [preview, setPreview] = useState(!hideAmount)
 
     return <span
         onClick={() => dispatch(change())}
@@ -15,7 +15,7 @@ const RenderCash = (props) => {
         onMouseLeave={() => setPreview(false)}
         className={'font-mono cursor-pointer'}
     >
-        {(preview || hideAmount) ? '**,***,***' : formatNumber(props.cash)}
+        {(!preview && hideAmount) ? '**,***,***' : formatNumber(props.cash)}
     </span>
 }
 
