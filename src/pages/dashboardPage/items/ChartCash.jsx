@@ -1,19 +1,39 @@
-import * as echarts from "echarts/core";
 import ReactECharts from "echarts-for-react";
-import {GridComponent, TitleComponent, TooltipComponent} from "echarts/components";
-import {BarChart} from "echarts/charts";
-import {CanvasRenderer} from "echarts/renderers";
+import callApi from "../../../apis/GatewayApi.js";
+import {useEffect, useState} from "react";
 
 const ChartCash = (props) => {
-    const options = {
+    const [dates, setDates] = useState([])
+    const [incomes, setIncomes] = useState([])
+    const [outcomes, setOutcomes] = useState([])
+    const [loans, setLoans] = useState([])
+    const [balances, setBalances] = useState([])
+
+    useEffect(() => {
+        callApi('pkg_bud_wallet.get_summary', {}, (data) => {
+            const oDate = data.map(e => e.C_DATE)
+            const oIncomes = data.map(e => e.C_UP_VALUE)
+            const oOutcomes = data.map(e => e.C_DOWN_VALUE)
+            const oLoan = data.map(e => e.C_LOAN_VALUE)
+            const oBalances = data.map(e => e.C_BALANCE_VALUE)
+
+            setDates(oDate)
+            setIncomes(oIncomes)
+            setOutcomes(oOutcomes)
+            setLoans(oLoan)
+            setBalances(oBalances)
+        })
+    }, [])
+
+    const option = {
         title: {
-            text: 'Rainfall vs Evaporation'
+            text: 'Income and Outcome'
         },
         tooltip: {
             trigger: 'axis'
         },
         legend: {
-            data: ['Cash balance', 'Loan']
+            data: ['Income', 'Outcome', 'Loan', 'Balance']
         },
         toolbox: {
             show: true,
@@ -28,35 +48,53 @@ const ChartCash = (props) => {
         xAxis: [
             {
                 type: 'category',
-                data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                data: dates
             }
         ],
         yAxis: [
             {
+                name: 'Loan value (đ)',
                 type: 'value'
+            },
+            {
+                name: 'Balance value (1.000đ)',
+                type: 'value',
+                alignTicks: true,
             }
         ],
         series: [
             {
-                name: 'Cash balance',
+                name: 'Outcome',
                 type: 'bar',
-                data: [
-                    2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3
-                ],
+                color: '#cd9191',
+                data: outcomes,
+            },
+            {
+                name: 'Income',
+                type: 'bar',
+                color: '#8fd192',
+                data: incomes,
             },
             {
                 name: 'Loan',
-                type: 'bar',
-                data: [
-                    2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3
-                ],
+                type: 'line',
+                color: '#E69703',
+                data: loans,
+            },
+            {
+                name: 'Balance',
+                type: 'line',
+                yAxisIndex: 1,
+                color: '#12e603',
+                data: balances,
             }
         ]
     };
 
     return (
         <ReactECharts
-            option={options}
+            style={{ width: '100%', height: '100%' }}
+            option={option}
         />
     )
 }
