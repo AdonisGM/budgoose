@@ -42,6 +42,19 @@ const TotalCash = (props) => {
                     {!data && '...'}
                 </p>
             </div>
+            <div className={'flex justify-between text-xs mt-2'}>
+                <p>Loan</p>
+                <p
+                    className={classLoan}
+                >
+                    {!!data && (
+                        <RenderCash
+                            cash={Math.abs(data.C_CASH_BALANCE_SAVING)}
+                        />
+                    )}
+                    {!data && '...'}
+                </p>
+            </div>
             <div className={'flex justify-between text-xs'}>
                 <p>Total</p>
                 <p className={'text-green-700'}>

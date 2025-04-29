@@ -66,13 +66,13 @@ const ChartCash = (props) => {
             {
                 name: 'Outcome',
                 type: 'bar',
-                color: '#cd9191',
+                color: '#e69a9a',
                 data: outcomes,
             },
             {
                 name: 'Income',
                 type: 'bar',
-                color: '#8fd192',
+                color: '#97e39b',
                 data: incomes,
             },
             {
@@ -85,7 +85,7 @@ const ChartCash = (props) => {
                 name: 'Balance',
                 type: 'line',
                 yAxisIndex: 1,
-                color: '#12e603',
+                color: '#1bc610',
                 data: balances,
             }
         ]
